@@ -1,3 +1,8 @@
+#!/usr/bin/python3
+"""
+Defines minimum operations function
+"""
+
 def minOperations(n):
     if n <= 1:
         return 0
@@ -13,6 +18,3 @@ def minOperations(n):
         divisor += 1
         
     return operations
-
-# Example usage
-print(minOperations(9))
