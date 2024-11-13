@@ -9,12 +9,6 @@ This module solves the N-Queens puzzle.
 """
 
 
-def print_board(board):
-    """Helper function to print the board in the required format."""
-    for row in board:
-        print(" ".join("Q" if i == row else "." for i in range(len(board))))
-
-
 def is_safe(board, row, col):
     """Check if it's safe to place a queen at (row, col)."""
     for r in range(row):
@@ -30,7 +24,8 @@ def is_safe(board, row, col):
 def solve_nqueens(N, board, row, solutions):
     """Recursively solve the N-Queens problem."""
     if row == N:
-        solutions.append(board[:])  # Store a copy of the current solution
+        # Add the solution in the correct format, each queen as [row, col]
+        solutions.append([[r, board[r]] for r in range(N)])
         return
 
     for col in range(N):
@@ -53,7 +48,8 @@ def nqueens(N):
     solutions = []  # List to store the solutions
     solve_nqueens(N, board, 0, solutions)
 
-    print(f"OK\n{len(solutions)}")
+    for solution in solutions:
+        print(solution)
 
 
 if __name__ == "__main__":
