@@ -27,16 +27,16 @@ def is_safe(board, row, col):
     return True
 
 
-def solve_nqueens(N, board, row):
+def solve_nqueens(N, board, row, solutions):
     """Recursively solve the N-Queens problem."""
     if row == N:
-        print_board(board)
+        solutions.append(board[:])  # Store a copy of the current solution
         return
 
     for col in range(N):
         if is_safe(board, row, col):
             board[row] = col
-            solve_nqueens(N, board, row + 1)
+            solve_nqueens(N, board, row + 1, solutions)
 
 
 def nqueens(N):
@@ -50,7 +50,10 @@ def nqueens(N):
         sys.exit(1)
 
     board = [-1] * N  # Initialize the board with -1 (no queens placed)
-    solve_nqueens(N, board, 0)
+    solutions = []  # List to store the solutions
+    solve_nqueens(N, board, 0, solutions)
+
+    print(f"OK\n{len(solutions)}")
 
 
 if __name__ == "__main__":
