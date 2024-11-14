@@ -1,31 +1,28 @@
-#!/usr/bin/env node
+#!/usr/bin/node
 
-const axios = require('axios');
-
-// Fetch and display all characters of a Star Wars movie
-async function fetchMovieCharacters (movieId) {
-  try {
-    // Get the film data
-    const filmResponse = await axios.get(
-      `https://swapi.dev/api/films/${movieId}/`
-    );
-    const characterUrls = filmResponse.data.characters;
-
-    // Retrieve and print each character's name in order
-    for (const url of characterUrls) {
-      const characterResponse = await axios.get(url);
-      console.log(characterResponse.data.name);
-    }
-  } catch (error) {
-    console.error(`Error fetching movie data: ${error.message}`);
-  }
-}
-
-// Get the Movie ID from the command line argument
+const request = require('request');
 const movieId = process.argv[2];
-if (!movieId) {
-  console.log('Usage: ./0-starwars_characters.js <Movie ID>');
-  process.exit(1);
-}
+const apiUrl = `https://swapi-api.alx-tools.com/api/films/${movieId}/`;
 
-fetchMovieCharacters(movieId);
+request(apiUrl, (error, response, body) => {
+  if (error) return console.error(error);
+
+  const characters = JSON.parse(body).characters;
+  const characterNames = [];
+
+  const printCharacters = () => {
+    characterNames.forEach((name) => console.log(name));
+  };
+
+  characters.forEach((character, index) => {
+    request(character, (error, response, body) => {
+      if (error) return console.error(error);
+
+      characterNames[index] = JSON.parse(body).name;
+
+      if (characterNames.filter(Boolean).length === characters.length) {
+        printCharacters();
+      }
+    });
+  });
+});
